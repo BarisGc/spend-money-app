@@ -26,36 +26,34 @@ function List() {
     }
 
     return (
-        <>
-            <Row>
-                {products.map((product, index) => (
-                    <Col md={4} className='my-2' >
-                        <Card key={product.id} className='listCard mt-5 pt-3 d-flex align-items-center h-100 '>
-                            <Card.Img variant="top" src={product.image} />
-                            <Card.Body className='d-flex flex-column align-items-center w-100 '>
-                                <Card.Title as="h5" className="listCardTitle">{product.title}</Card.Title>
-                                <Card.Subtitle className="mb-2 text-muted">{product.price}</Card.Subtitle>
-                                <ButtonToolbar className="mb-3" aria-label="Toolbar with Button groups">
-                                    <ButtonGroup className="me-2" aria-label="First group">
-                                        <Button size="sm" variant="secondary">Sell</Button>
+        <Row className="gap-1">
+            {products.map((product) => (
+                <Col md={4} className='' >
+                    <Card key={product.id} className='listCard mt-5 pt-3 d-flex align-items-center h-100 gap-2 '>
+                        <Card.Img variant="top" src={product.image} />
+                        <Card.Body className='d-flex flex-column align-items-center w-100 px-2'>
+                            <Card.Title as="h5" className="listCardTitle">{product.title}</Card.Title>
+                            <Card.Subtitle className="mb-2 text-muted">{product.price}</Card.Subtitle>
+                            <ButtonToolbar className="mb-3" aria-label="Toolbar with Button groups">
+                                <ButtonGroup className="me-2" aria-label="First group">
+                                    <Button size="sm" variant="secondary" className='activeColorSellButton fw-bolder fs-6'>Sell</Button>
 
-                                        <InputGroup size="sm" className="w-50">
-                                            <FormControl
-                                                type="text"
-                                                placeholder="1"
-                                                aria-label="1"
-                                                aria-describedby="btnGroupAddon"
-                                            />
-                                        </InputGroup>
-                                        <Button size="sm" variant="secondary" className=''>Buy</Button>
-                                    </ButtonGroup>
-                                </ButtonToolbar>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
-        </>
+                                    <InputGroup size="sm" className=" CardPurchaseQuantity w-50">
+                                        <FormControl
+                                            type="number"
+                                            placeholder="1"
+                                            aria-label="1"
+                                            aria-describedby="btnGroupAddon"
+                                        />
+                                    </InputGroup>
+                                    <Button size="sm" variant="secondary" className='defaultColorBuyButton fw-bolder fs-6'>Buy</Button>
+                                </ButtonGroup>
+                            </ButtonToolbar>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            ))}
+        </Row>
     )
 }
 
