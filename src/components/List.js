@@ -26,16 +26,16 @@ function List() {
     }
 
     return (
-        <Row className="gap-1">
+        <Row className="pt-0">
             {products.map((product) => (
-                <Col md={4} className='' >
-                    <Card key={product.id} className='listCard mt-5 pt-3 d-flex align-items-center h-100 gap-2 '>
+                <Col md={{ span: 4, offset: 0 }} className='pt-0 mb-4'>
+                    <Card key={product.id} className='listCard pt-3 d-flex align-items-center h-100 '>
                         <Card.Img variant="top" src={product.image} />
                         <Card.Body className='d-flex flex-column align-items-center w-100 px-2'>
                             <Card.Title as="h5" className="listCardTitle">{product.title}</Card.Title>
                             <Card.Subtitle className="mb-2 text-muted">{product.price}</Card.Subtitle>
                             <ButtonToolbar className="mb-3" aria-label="Toolbar with Button groups">
-                                <ButtonGroup className="me-2" aria-label="First group">
+                                <ButtonGroup className="" aria-label="First group">
                                     <Button size="sm" variant="secondary" className='activeColorSellButton fw-bolder fs-6'>Sell</Button>
 
                                     <InputGroup size="sm" className=" CardPurchaseQuantity w-50">
