@@ -21,10 +21,7 @@ export const productsSlice = createSlice({
     name: 'products',
     initialState,
     reducers: {
-        addPurchase: productAdaptor.addOne,
-        addDefaultPurchase: productAdaptor.addMany,
-        deletePurchase: productAdaptor.removeOne,
-        updatePurchase: productAdaptor.updateOne,
+        setPurchase: productAdaptor.setOne,
     },
     extraReducers: {
         [fetchProducts.pending]: (state, action) => {
@@ -41,5 +38,5 @@ export const productsSlice = createSlice({
     },
 });
 
-export const { addPurchase, deletePurchase, updatePurchase, addDefaultPurchase } = productsSlice.actions;
+export const { setPurchase } = productsSlice.actions;
 export default productsSlice.reducer;

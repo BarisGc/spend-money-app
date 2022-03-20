@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchProducts, productSelectors, addPurchase, deletePurchase, updatePurchase, addDefaultPurchase }
+import { fetchProducts, productSelectors, setPurchase }
     from "../redux/productsSlice";
 import { Row, Col, Card, ButtonToolbar, Button, ButtonGroup, InputGroup, FormControl } from 'react-bootstrap'
 
@@ -9,11 +9,11 @@ import { Row, Col, Card, ButtonToolbar, Button, ButtonGroup, InputGroup, FormCon
 
 
 function List() {
-    const [purchasedQuantityState, setPurchasedQuantityState] = useState({ "productId": { "purchased": 0 } });
+    const [purchasedQuantityState, setPurchasedQuantityState] = useState({ id: 0, purchased: 0 });
 
     const products = useSelector((state) => state.products.items);
     const status = useSelector((state) => state.products.status);
-    const error = useSelector((state) => state.products.error);
+    // const error = useSelector((state) => state.products.error);
 
     const dispatch = useDispatch();
 
@@ -21,25 +21,22 @@ function List() {
         if (status === 'idle') dispatch(fetchProducts());
     }, [dispatch, status])
 
+    // Initial Purchase Quantity Equals Zero
     useEffect(() => {
         if (products) {
-            const purchaseDefaultData = products.map((element) => ({
-                id: element.id, purchased: purchasedQuantityState.productId.purchased
+            const purchaseData = products.map((element) => ({
+                id: element.id,
+                purchased: 0
             }));
-            dispatch(addDefaultPurchase(purchaseDefaultData));
+            purchaseData.forEach(element => {
+                dispatch(setPurchase(element));
+            });
         }
     }, [products])
 
+    // Set New Purchase Quantity
     useEffect(() => {
-        dispatch(
-            updatePurchase({
-                id: purchasedQuantityState.id,
-                changes: {
-                    name,
-                    phoneNumber: number
-                },
-            }),
-        );
+        dispatch(setPurchase(purchasedQuantityState));
     }, [purchasedQuantityState])
 
 
@@ -47,10 +44,11 @@ function List() {
 
     console.log("products", products)
     console.log("productsPurchaseInfo", productsPurchaseInfo)
+    console.log("productsPurchaseInfo22222", productsPurchaseInfo[3])
 
     const purchaseInput = (e) => {
-        console.log("e", e)
-        setPurchasedQuantityState({ "e.target.name": "e.target.value" })
+        console.log("event", e.target.name, e.target.value)
+        // setPurchasedQuantityState({ "e.target.name": e.target.value })
     }
 
     const purchaseIncreaseByOne = (e) => {
@@ -75,13 +73,14 @@ function List() {
                         <Card.Body className='d-flex flex-column align-items-center w-100 px-2'>
                             <Card.Title as="h5" className="listCardTitle">{product.title}</Card.Title>
                             <Card.Subtitle className="mb-2 price">${product.price}</Card.Subtitle>
+
                             <ButtonToolbar className="mb-3" aria-label="Toolbar with Button groups">
                                 <ButtonGroup className="" aria-label="First group">
                                     <Button name={`${product.id}`} size="sm" variant="secondary" className='activeColorSellButton fw-bolder fs-6' onClick={purchaseDecraseByOne}>Sell</Button>
 
                                     <InputGroup size="sm" className=" CardPurchaseQuantity w-50">
                                         <FormControl name={`${product.id}`}
-                                            value={purchasedQuantityState.productId}
+                                            value={productsPurchaseInfo}
                                             onChange={purchaseInput}
                                             type="number"
                                             placeholder="1"
@@ -93,6 +92,7 @@ function List() {
                                     <Button name={`${product.id}`} size="sm" variant="secondary" className='defaultColorBuyButton fw-bolder fs-6' onClick={purchaseIncreaseByOne}>Buy</Button>
                                 </ButtonGroup>
                             </ButtonToolbar>
+
                         </Card.Body>
                     </Card>
                 </Col>
