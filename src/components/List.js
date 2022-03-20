@@ -39,26 +39,28 @@ function List() {
         dispatch(setPurchase(purchasedQuantityState));
     }, [purchasedQuantityState])
 
-
+    // Entity of Products
     const productsPurchaseInfo = useSelector(productSelectors.selectAll)
 
     console.log("products", products)
     console.log("productsPurchaseInfo", productsPurchaseInfo)
-    console.log("productsPurchaseInfo22222", productsPurchaseInfo[3])
 
     const purchaseInput = (e) => {
-        console.log("event", e.target.name, e.target.value)
-        // setPurchasedQuantityState({ "e.target.name": e.target.value })
+        setPurchasedQuantityState({ id: Number(e.target.name), purchased: Number(e.target.value) })
     }
 
     const purchaseIncreaseByOne = (e) => {
-        setPurchasedQuantityState({ "e.target.name": e.target.value + 1 })
+        setPurchasedQuantityState({ id: Number(e.target.name), purchased: Number(purchaseOrderValue(e.target.name)) + 1 })
     }
 
     const purchaseDecraseByOne = (e) => {
-        setPurchasedQuantityState({ "e.target.name": e.target.value - 1 })
+        setPurchasedQuantityState({ id: Number(e.target.name), purchased: Number(purchaseOrderValue(e.target.name)) - 1 })
     }
 
+    function purchaseOrderValue(productId) {
+        let findPurchaseValue = products[1] && productsPurchaseInfo[1] ? productsPurchaseInfo.find((element) => element.id == productId) : 0
+        return findPurchaseValue.purchased
+    }
 
     // if (status === 'failed') {
     //     return <Error message={error} />
@@ -80,7 +82,7 @@ function List() {
 
                                     <InputGroup size="sm" className=" CardPurchaseQuantity w-50">
                                         <FormControl name={`${product.id}`}
-                                            value={productsPurchaseInfo}
+                                            value={purchaseOrderValue(product.id) || 0}
                                             onChange={purchaseInput}
                                             type="number"
                                             placeholder="1"
