@@ -9,6 +9,10 @@ body {
   border: 0;
 }
 
+.price {
+  color: #24c486
+}
+
 /* Header.js */
 
 .headerCardTitle {

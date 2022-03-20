@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col, Card, Stack, ListGroup, ListGroupItem } from 'react-bootstrap'
+import { Row, Col, Card } from 'react-bootstrap'
 
 function Receipt() {
     return (
@@ -8,14 +8,39 @@ function Receipt() {
                 <Card className="text-center">
                     <Card.Body>
                         <Card.Title as="h3" className='fw-bolder fs-3 mb-3'>Your Receipt</Card.Title>
-                        <Row className=' border-1 border-bottom border-dark pb-2'>
-                            <Col md={{ span: 6, offset: 0 }} className='text-start' >Opna Women's Short Sleeva </Col>
-                            <Col md={{ span: 3, offset: 0 }} className='text-center'>x1</Col>
-                            <Col md={{ span: 3, offset: 0 }} className='text-end'>$7.95</Col>
+                        <Row className='  pb-2 '>
+                            <Col xs={{ span: 6, offset: 0 }} className='text-start' >Opna Women's Short Sleeva </Col>
+                            <Col xs={{ span: 3, offset: 0 }} className='text-center'>x1</Col>
+                            <Col xs={{ span: 3, offset: 0 }} className='text-end price fw-bold'>$7.95</Col>
                         </Row>
-                        <Row className='pt-2'>
+                        <Row className='  pb-2 '>
+                            <Col xs={{ span: 6, offset: 0 }} className='text-start' >Opna Women's Short Sleeva </Col>
+                            <Col xs={{ span: 3, offset: 0 }} className='text-center'>x1</Col>
+                            <Col xs={{ span: 3, offset: 0 }} className='text-end price fw-bold'>$7.95</Col>
+                        </Row>
+                        <Row className='  pb-2 '>
+                            <Col xs={{ span: 6, offset: 0 }} className='text-start' >Opna Women's Short Sleeva </Col>
+                            <Col xs={{ span: 3, offset: 0 }} className='text-center'>x1</Col>
+                            <Col xs={{ span: 3, offset: 0 }} className='text-end price fw-bold'>$7.95</Col>
+                        </Row>
+                        <Row className='  pb-2 '>
+                            <Col xs={{ span: 6, offset: 0 }} className='text-start' >Opna Women's Short Sleeva </Col>
+                            <Col xs={{ span: 3, offset: 0 }} className='text-center'>x1</Col>
+                            <Col xs={{ span: 3, offset: 0 }} className='text-end price fw-bold'>$7.95</Col>
+                        </Row>
+                        <Row className='  pb-2 '>
+                            <Col xs={{ span: 6, offset: 0 }} className='text-start' >Opna Women's Short Sleeva </Col>
+                            <Col xs={{ span: 3, offset: 0 }} className='text-center'>x1</Col>
+                            <Col xs={{ span: 3, offset: 0 }} className='text-end price fw-bold'>$7.95</Col>
+                        </Row>
+                        <Row className='  pb-2 '>
+                            <Col xs={{ span: 6, offset: 0 }} className='text-start' >Opna Women's Short Sleeva </Col>
+                            <Col xs={{ span: 3, offset: 0 }} className='text-center'>x1</Col>
+                            <Col xs={{ span: 3, offset: 0 }} className='text-end price fw-bold'>$7.95</Col>
+                        </Row>
+                        <Row className='pt-2 border-1 border-top border-dark'>
                             <Col className='text-start fw-bold'>TOTAL :</Col>
-                            <Col className='text-end'>3 of 3</Col>
+                            <Col className='text-end price fw-bold'>$7.95</Col>
                         </Row>
                     </Card.Body>
                 </Card>

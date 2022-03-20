@@ -1,22 +1,31 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Fetch Api Data
 export const fetchProducts = createAsyncThunk('products/getAllProducts', async () => {
-    const res = await axios(`https://fakestoreapi.com/products`)
+    const res = await axios(`https://fakestoreapi.com/products?limit=18`)
     return res.data
 })
 
+// Entity Adapter
+export const productAdaptor = createEntityAdapter();
+const initialState = productAdaptor.getInitialState({
+    items: [],
+    status: 'idle',
+    budget: 10000,
+});
+
+export const productSelectors = productAdaptor.getSelectors((state) => state.products);
+
 export const productsSlice = createSlice({
     name: 'products',
-    initialState: {
-        items: [],
-        status: 'idle',
-        budget: 100000,
-        items_maxStorage_quantity: [],
-        items_purchased_quantity: [5],
+    initialState,
+    reducers: {
+        addPurchase: productAdaptor.addOne,
+        addDefaultPurchase: productAdaptor.addMany,
+        deletePurchase: productAdaptor.removeOne,
+        updatePurchase: productAdaptor.updateOne,
     },
-    reducers: {},
     extraReducers: {
         [fetchProducts.pending]: (state, action) => {
             state.status = 'loading';
@@ -32,4 +41,5 @@ export const productsSlice = createSlice({
     },
 });
 
+export const { addPurchase, deletePurchase, updatePurchase, addDefaultPurchase } = productsSlice.actions;
 export default productsSlice.reducer;

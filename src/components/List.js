@@ -1,17 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchProducts } from "../redux/productsSlice";
+import { fetchProducts, productSelectors, addPurchase, deletePurchase, updatePurchase, addDefaultPurchase }
+    from "../redux/productsSlice";
 import { Row, Col, Card, ButtonToolbar, Button, ButtonGroup, InputGroup, FormControl } from 'react-bootstrap'
 
-import Loading from './Loading';
-import Error from './Error';
+// import Loading from './Loading';
+// import Error from './Error';
 
 
 function List() {
+    const [purchasedQuantityState, setPurchasedQuantityState] = useState({ "productId": { "purchased": 0 } });
+
     const products = useSelector((state) => state.products.items);
-    const budget = useSelector((state) => state.products.budget);
-    const items_maxStorage_quantity = useSelector((state) => state.products.items_maxStorage_quantity);
-    const items_purchased_quantity = useSelector((state) => state.products.items_purchased_quantity);
     const status = useSelector((state) => state.products.status);
     const error = useSelector((state) => state.products.error);
 
@@ -21,32 +21,76 @@ function List() {
         if (status === 'idle') dispatch(fetchProducts());
     }, [dispatch, status])
 
-    if (status === 'failed') {
-        return <Error message={error} />
+    useEffect(() => {
+        if (products) {
+            const purchaseDefaultData = products.map((element) => ({
+                id: element.id, purchased: purchasedQuantityState.productId.purchased
+            }));
+            dispatch(addDefaultPurchase(purchaseDefaultData));
+        }
+    }, [products])
+
+    useEffect(() => {
+        dispatch(
+            updatePurchase({
+                id: purchasedQuantityState.id,
+                changes: {
+                    name,
+                    phoneNumber: number
+                },
+            }),
+        );
+    }, [purchasedQuantityState])
+
+
+    const productsPurchaseInfo = useSelector(productSelectors.selectAll)
+
+    console.log("products", products)
+    console.log("productsPurchaseInfo", productsPurchaseInfo)
+
+    const purchaseInput = (e) => {
+        console.log("e", e)
+        setPurchasedQuantityState({ "e.target.name": "e.target.value" })
     }
+
+    const purchaseIncreaseByOne = (e) => {
+        setPurchasedQuantityState({ "e.target.name": e.target.value + 1 })
+    }
+
+    const purchaseDecraseByOne = (e) => {
+        setPurchasedQuantityState({ "e.target.name": e.target.value - 1 })
+    }
+
+
+    // if (status === 'failed') {
+    //     return <Error message={error} />
+    // }
 
     return (
         <Row className="pt-0">
             {products.map((product) => (
-                <Col md={{ span: 4, offset: 0 }} className='pt-0 mb-4'>
-                    <Card key={product.id} className='listCard pt-3 d-flex align-items-center h-100 '>
+                <Col key={product.id} md={{ span: 4, offset: 0 }} className='pt-0 mb-4'>
+                    <Card className='listCard pt-3 d-flex align-items-center h-100 '>
                         <Card.Img variant="top" src={product.image} />
                         <Card.Body className='d-flex flex-column align-items-center w-100 px-2'>
                             <Card.Title as="h5" className="listCardTitle">{product.title}</Card.Title>
-                            <Card.Subtitle className="mb-2 text-muted">{product.price}</Card.Subtitle>
+                            <Card.Subtitle className="mb-2 price">${product.price}</Card.Subtitle>
                             <ButtonToolbar className="mb-3" aria-label="Toolbar with Button groups">
                                 <ButtonGroup className="" aria-label="First group">
-                                    <Button size="sm" variant="secondary" className='activeColorSellButton fw-bolder fs-6'>Sell</Button>
+                                    <Button name={`${product.id}`} size="sm" variant="secondary" className='activeColorSellButton fw-bolder fs-6' onClick={purchaseDecraseByOne}>Sell</Button>
 
                                     <InputGroup size="sm" className=" CardPurchaseQuantity w-50">
-                                        <FormControl
+                                        <FormControl name={`${product.id}`}
+                                            value={purchasedQuantityState.productId}
+                                            onChange={purchaseInput}
                                             type="number"
                                             placeholder="1"
                                             aria-label="1"
                                             aria-describedby="btnGroupAddon"
                                         />
                                     </InputGroup>
-                                    <Button size="sm" variant="secondary" className='defaultColorBuyButton fw-bolder fs-6'>Buy</Button>
+
+                                    <Button name={`${product.id}`} size="sm" variant="secondary" className='defaultColorBuyButton fw-bolder fs-6' onClick={purchaseIncreaseByOne}>Buy</Button>
                                 </ButtonGroup>
                             </ButtonToolbar>
                         </Card.Body>
