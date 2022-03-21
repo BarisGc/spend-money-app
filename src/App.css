@@ -100,10 +100,16 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+/* .btn:focus {
+  outline: none;
+  box-shadow: none;
+} */
+
 .defaultColorSellButton {
-  background-color: #B2BEC3;
-  color: #FFFFFF;
+  background-color: #f1f2f6;
+  color: #333333;
   border: 0;
+  pointer-events: none;
 }
 
 .activeColorSellButton {
@@ -118,20 +124,27 @@ input[type=number] {
   border: 0;
 }
 
+.StockColorBuyButton {
+  background-color: #f1f2f6;
+  color: #333333;
+  border: 0;
+  pointer-events: none;
+}
+
 .defaultColorSellButton:hover {
   background-color: #B2BEC3;
   color: #FFFFFF;
   border: 0;
 }
 
-.activeColorSellButton:hover {
-  background-color: #F53B6C;
+.defaultColorBuyButton:hover {
+  background-color: #25C585;
   color: #FFFFFF;
   border: 0;
 }
 
-.defaultColorBuyButton:hover {
-  background-color: #25C585;
+.activeColorSellButton:hover {
+  background-color: #F53B6C;
   color: #FFFFFF;
   border: 0;
 }

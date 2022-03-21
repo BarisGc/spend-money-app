@@ -12,7 +12,7 @@ export const productAdaptor = createEntityAdapter();
 const initialState = productAdaptor.getInitialState({
     items: [],
     status: 'idle',
-    budget: 10000,
+    initialBudget: 10000,
 });
 
 export const productSelectors = productAdaptor.getSelectors((state) => state.products);

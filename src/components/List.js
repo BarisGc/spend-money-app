@@ -9,10 +9,14 @@ import { Row, Col, Card, ButtonToolbar, Button, ButtonGroup, InputGroup, FormCon
 
 
 function List() {
-    const [purchasedQuantityState, setPurchasedQuantityState] = useState({ id: 0, purchased: 0 });
+    // Quantity
+    const [purchasedQuantityState, setPurchasedQuantityState] = useState();
+    // Money
+    const [purchaseOrderValueState, setPurchaseOrderValueState] = useState(0)
 
     const products = useSelector((state) => state.products.items);
     const status = useSelector((state) => state.products.status);
+    const initialBudget = useSelector((state) => state.products.initialBudget);
     // const error = useSelector((state) => state.products.error);
 
     const dispatch = useDispatch();
@@ -21,23 +25,58 @@ function List() {
         if (status === 'idle') dispatch(fetchProducts());
     }, [dispatch, status])
 
-    // Initial Purchase Quantity Equals Zero
+    // Initial Purchase Quantity Equals {id:0, purchased:Zero}
     useEffect(() => {
         if (products) {
-            const purchaseData = products.map((element) => ({
-                id: element.id,
-                purchased: 0
+            const purchaseData = products.map((product) => ({
+                id: product.id,
+                max_stock: Number(product.id) * Math.floor(Math.random() * 5),
+                purchased: 0,
+                purchasedValue: 0
             }));
-            purchaseData.forEach(element => {
-                dispatch(setPurchase(element));
+            purchaseData.forEach(order => {
+                dispatch(setPurchase(order));
             });
         }
-    }, [products])
+    }, [products, dispatch])
 
-    // Set New Purchase Quantity
+    // Set New Purchase Quantity & Payment
     useEffect(() => {
-        dispatch(setPurchase(purchasedQuantityState));
-    }, [purchasedQuantityState])
+        if (products[1] && purchasedQuantityState) {
+
+
+
+            if (purchasedQuantityState.id != 0) {
+                let sameTypeProductOrderUnitPrice = products.find((product) => {
+                    return product.id == purchasedQuantityState.id
+                }).price
+
+                console.log("purchasedQuantityState", purchasedQuantityState)
+                console.log("sameTypeProductOrderPrice", sameTypeProductOrderUnitPrice)
+                console.log("newCurrentBudget1", initialBudget - purchasedQuantityState.purchased * sameTypeProductOrderUnitPrice)
+
+
+                let addPurchaseOrderValueIntoEntity = {
+                    ...purchasedQuantityState,
+                    purchasedValue: purchasedQuantityState.purchased * sameTypeProductOrderUnitPrice
+                };
+                dispatch(setPurchase(addPurchaseOrderValueIntoEntity));
+
+                setPurchaseOrderValueState(purchasedQuantityState.purchased * sameTypeProductOrderUnitPrice)
+
+            }
+
+        }
+
+        // if (sameTypeProductOrderPrice < initialBudget) {
+        //     setPurchaseOrderValueState(sameTypeProductOrderPrice)
+        //     dispatch(setCurrentBudget(initialBudget - sameTypeProductOrderPrice));
+
+        //     console.log("sameTypeProductOrderPrice", sameTypeProductOrderTotalPrice)
+        //     console.log("purchaseOrderValueState", productsPurchaseInfo)
+        //     console.log("initialBudget", initialBudget)
+        // }
+    }, [purchasedQuantityState, products, dispatch])
 
     // Entity of Products
     const productsPurchaseInfo = useSelector(productSelectors.selectAll)
@@ -46,20 +85,42 @@ function List() {
     console.log("productsPurchaseInfo", productsPurchaseInfo)
 
     const purchaseInput = (e) => {
-        setPurchasedQuantityState({ id: Number(e.target.name), purchased: Number(e.target.value) })
+        setPurchasedQuantityState({
+            id: Number(e.target.name),
+            max_stock: Number(purchaseMaxStorage(e.target.name)),
+            purchased: Number(e.target.value),
+        })
     }
 
     const purchaseIncreaseByOne = (e) => {
-        setPurchasedQuantityState({ id: Number(e.target.name), purchased: Number(purchaseOrderValue(e.target.name)) + 1 })
+        e.preventDefault()
+
+        setPurchasedQuantityState({
+            id: Number(e.target.name),
+            max_stock: Number(purchaseMaxStorage(e.target.name)),
+            purchased: Number(purchaseOrderQuantity(e.target.name)) + 1,
+        })
     }
 
     const purchaseDecraseByOne = (e) => {
-        setPurchasedQuantityState({ id: Number(e.target.name), purchased: Number(purchaseOrderValue(e.target.name)) - 1 })
+        e.preventDefault()
+        if (Number(purchaseOrderQuantity(e.target.name)) - 1 >= 0) {
+            setPurchasedQuantityState({
+                id: Number(e.target.name),
+                max_stock: Number(purchaseMaxStorage(e.target.name)),
+                purchased: Number(purchaseOrderQuantity(e.target.name)) - 1,
+            })
+        }
     }
 
-    function purchaseOrderValue(productId) {
+    function purchaseOrderQuantity(productId) {
         let findPurchaseValue = products[1] && productsPurchaseInfo[1] ? productsPurchaseInfo.find((element) => element.id == productId) : 0
         return findPurchaseValue.purchased
+    }
+
+    function purchaseMaxStorage(productId) {
+        let findPurchaseMaxStorage = products[1] && productsPurchaseInfo[1] ? productsPurchaseInfo.find((element) => element.id == productId) : 0
+        return findPurchaseMaxStorage.max_stock
     }
 
     // if (status === 'failed') {
@@ -78,11 +139,14 @@ function List() {
 
                             <ButtonToolbar className="mb-3" aria-label="Toolbar with Button groups">
                                 <ButtonGroup className="" aria-label="First group">
-                                    <Button name={`${product.id}`} size="sm" variant="secondary" className='activeColorSellButton fw-bolder fs-6' onClick={purchaseDecraseByOne}>Sell</Button>
+                                    <Button name={`${product.id}`} size="sm" variant="secondary"
+                                        // className={`container top-3 ${isActive ? "shadow": ""}`}
+                                        className={`fw-bolder fs-6  ${purchaseOrderQuantity(product.id) == 0 ? "defaultColorSellButton" : "activeColorSellButton"}`}
+                                        onMouseDown={purchaseDecraseByOne}>Sell</Button>
 
                                     <InputGroup size="sm" className=" CardPurchaseQuantity w-50">
                                         <FormControl name={`${product.id}`}
-                                            value={purchaseOrderValue(product.id) || 0}
+                                            value={purchaseOrderQuantity(product.id) || 0}
                                             onChange={purchaseInput}
                                             type="number"
                                             placeholder="1"
@@ -91,7 +155,8 @@ function List() {
                                         />
                                     </InputGroup>
 
-                                    <Button name={`${product.id}`} size="sm" variant="secondary" className='defaultColorBuyButton fw-bolder fs-6' onClick={purchaseIncreaseByOne}>Buy</Button>
+                                    <Button name={`${product.id}`} size="sm" variant="secondary" className={`fw-bolder fs-6  ${purchaseMaxStorage(product.id) > purchaseOrderQuantity(product.id) ? "defaultColorBuyButton" : "StockColorBuyButton"} `}
+                                        onMouseDown={purchaseIncreaseByOne}>Buy</Button>
                                 </ButtonGroup>
                             </ButtonToolbar>
 
