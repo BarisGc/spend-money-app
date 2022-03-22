@@ -70,24 +70,30 @@ function List() {
 
     const purchaseInput = (e) => {
         console.log("test", currentBudget - e.target.value * (products.find((product) => product.id == e.target.name)).price)
-        if (currentBudget - e.target.value * (products.find((product) => product.id == e.target.name)).price > 0) {
-            setPurchasedQuantityState({
-                id: Number(e.target.name),
-                max_stock: Number(purchaseMaxStorage(e.target.name)),
-                purchased: Number(e.target.value) < Number(purchaseMaxStorage(e.target.name)) ?
-                    Number(e.target.value) : Number(purchaseMaxStorage(e.target.name)),
-            })
-        }
+        // if (currentBudget - e.target.value * (products.find((product) => product.id == e.target.name)).price > 0) {
+        setPurchasedQuantityState({
+            id: Number(e.target.name),
+            max_stock: Number(purchaseMaxStorage(e.target.name)),
+            purchased: Number(e.target.value) < Number(purchaseMaxStorage(e.target.name)) ?
+                Number(e.target.value) : Number(purchaseMaxStorage(e.target.name)),
+        })
+        // }
     }
 
     const purchaseIncreaseByOne = (e) => {
         e.preventDefault()
 
-        setPurchasedQuantityState({
-            id: Number(e.target.name),
-            max_stock: Number(purchaseMaxStorage(e.target.name)),
-            purchased: Number(purchaseOrderQuantity(e.target.name)) + 1,
-        })
+        let negativeBudgetCheck = (currentBudget -
+            ((products.find((product) => product.id == e.target.name)).price)
+        ).toFixed(0)
+
+        if (negativeBudgetCheck >= 0) {
+            setPurchasedQuantityState({
+                id: Number(e.target.name),
+                max_stock: Number(purchaseMaxStorage(e.target.name)),
+                purchased: Number(purchaseOrderQuantity(e.target.name)) + 1,
+            })
+        }
     }
 
     const purchaseDecraseByOne = (e) => {
