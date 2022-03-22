@@ -11,13 +11,21 @@ import { Row, Col, Card, ButtonToolbar, Button, ButtonGroup, InputGroup, FormCon
 function List() {
     // Quantity
     const [purchasedQuantityState, setPurchasedQuantityState] = useState();
-    // Money
-    const [purchaseOrderValueState, setPurchaseOrderValueState] = useState(0)
 
     const products = useSelector((state) => state.products.items);
     const status = useSelector((state) => state.products.status);
     const initialBudget = useSelector((state) => state.products.initialBudget);
+    // Purchase Order Entity
+    const productsPurchaseInfo = useSelector(productSelectors.selectAll)
     // const error = useSelector((state) => state.products.error);
+
+    // Spended Budget
+    let spendedBudget = productsPurchaseInfo.reduce(
+        (previousValue, currentValue) => {
+            return (previousValue + currentValue.purchasedValue)
+        }, 0)
+
+    let currentBudget = initialBudget - spendedBudget
 
     const dispatch = useDispatch();
 
@@ -44,17 +52,10 @@ function List() {
     useEffect(() => {
         if (products[1] && purchasedQuantityState) {
 
-
-
             if (purchasedQuantityState.id != 0) {
                 let sameTypeProductOrderUnitPrice = products.find((product) => {
                     return product.id == purchasedQuantityState.id
                 }).price
-
-                console.log("purchasedQuantityState", purchasedQuantityState)
-                console.log("sameTypeProductOrderPrice", sameTypeProductOrderUnitPrice)
-                console.log("newCurrentBudget1", initialBudget - purchasedQuantityState.purchased * sameTypeProductOrderUnitPrice)
-
 
                 let addPurchaseOrderValueIntoEntity = {
                     ...purchasedQuantityState,
@@ -62,34 +63,21 @@ function List() {
                 };
                 dispatch(setPurchase(addPurchaseOrderValueIntoEntity));
 
-                setPurchaseOrderValueState(purchasedQuantityState.purchased * sameTypeProductOrderUnitPrice)
-
             }
-
         }
 
-        // if (sameTypeProductOrderPrice < initialBudget) {
-        //     setPurchaseOrderValueState(sameTypeProductOrderPrice)
-        //     dispatch(setCurrentBudget(initialBudget - sameTypeProductOrderPrice));
-
-        //     console.log("sameTypeProductOrderPrice", sameTypeProductOrderTotalPrice)
-        //     console.log("purchaseOrderValueState", productsPurchaseInfo)
-        //     console.log("initialBudget", initialBudget)
-        // }
     }, [purchasedQuantityState, products, dispatch])
 
-    // Entity of Products
-    const productsPurchaseInfo = useSelector(productSelectors.selectAll)
-
-    console.log("products", products)
-    console.log("productsPurchaseInfo", productsPurchaseInfo)
-
     const purchaseInput = (e) => {
-        setPurchasedQuantityState({
-            id: Number(e.target.name),
-            max_stock: Number(purchaseMaxStorage(e.target.name)),
-            purchased: Number(e.target.value),
-        })
+        console.log("test", currentBudget - e.target.value * (products.find((product) => product.id == e.target.name)).price)
+        if (currentBudget - e.target.value * (products.find((product) => product.id == e.target.name)).price > 0) {
+            setPurchasedQuantityState({
+                id: Number(e.target.name),
+                max_stock: Number(purchaseMaxStorage(e.target.name)),
+                purchased: Number(e.target.value) < Number(purchaseMaxStorage(e.target.name)) ?
+                    Number(e.target.value) : Number(purchaseMaxStorage(e.target.name)),
+            })
+        }
     }
 
     const purchaseIncreaseByOne = (e) => {
@@ -123,6 +111,9 @@ function List() {
         return findPurchaseMaxStorage.max_stock
     }
 
+    console.log("products", products)
+    console.log("productsPurchaseInfo", productsPurchaseInfo)
+
     // if (status === 'failed') {
     //     return <Error message={error} />
     // }
@@ -146,7 +137,8 @@ function List() {
 
                                     <InputGroup size="sm" className=" CardPurchaseQuantity w-50">
                                         <FormControl name={`${product.id}`}
-                                            value={purchaseOrderQuantity(product.id) || 0}
+                                            // value={purchaseOrderQuantity(product.id) || 0}
+                                            value={purchaseOrderQuantity(product.id) < purchaseMaxStorage(product.id) ? purchaseOrderQuantity(product.id) : purchaseMaxStorage(product.id) || 0}
                                             onChange={purchaseInput}
                                             type="number"
                                             placeholder="1"

@@ -8,28 +8,14 @@ import { productSelectors }
 function BudgetBar() {
     const productsPurchaseInfo = useSelector(productSelectors.selectAll)
     const initialBudget = useSelector((state) => state.products.initialBudget);
-    // const initialValue = 0;
-    // const sumWithInitial = array1.reduce(
-    //     (previousValue, currentValue) => previousValue + currentValue,
-    //     initialValue
-    // );
 
-    let consumedBudget = 0;
+    let spendedBudget = productsPurchaseInfo.reduce(
+        (previousValue, currentValue) => {
+            return (previousValue + currentValue.purchasedValue)
+        }, 0)
 
-    productsPurchaseInfo.forEach((order) => {
-        consumedBudget += order.purchasedValue
-    })
-    let currentBudget = initialBudget - consumedBudget
+    let currentBudget = initialBudget - spendedBudget
     const currentBudgetFormatted = numeral(currentBudget).format('0,0');
-
-    console.log(currentBudget)
-
-    // let consumedBudget = productsPurchaseInfo.reduce((previousValue, currentValue) =>
-    //     previousValue.purchasedValue + currentValue.purchasedValue, 0)
-
-    // let currentBudget = initialBudget - consumedBudget
-
-    // console.log("header", currentBudget)
 
     return (
         // .sticky-top will not work if it is inside any container. It must be the outside-most element inside <body>
