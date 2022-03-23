@@ -9,6 +9,7 @@ import { Row, Col, Card, ButtonToolbar, Button, ButtonGroup, InputGroup, FormCon
 
 
 function List() {
+    const dispatch = useDispatch();
     // Quantity
     const [purchasedQuantityState, setPurchasedQuantityState] = useState();
 
@@ -25,9 +26,17 @@ function List() {
             return (previousValue + currentValue.purchasedValue)
         }, 0)
 
-    let currentBudget = initialBudget - spendedBudget
+    // Current Budget
 
-    const dispatch = useDispatch();
+    const [currentBudget, setCurrentBudget] = useState(initialBudget)
+    useEffect(() => {
+        let spendedBudget = productsPurchaseInfo.reduce(
+            (previousValue, currentValue) => {
+                return (previousValue + currentValue.purchasedValue)
+            }, 0)
+        setCurrentBudget(initialBudget - spendedBudget)
+    }, [initialBudget, spendedBudget])
+
 
     useEffect(() => {
         if (status === 'idle') dispatch(fetchProducts());
@@ -69,15 +78,33 @@ function List() {
     }, [purchasedQuantityState, products, dispatch])
 
     const purchaseInput = (e) => {
-        console.log("test", currentBudget - e.target.value * (products.find((product) => product.id == e.target.name)).price)
-        // if (currentBudget - e.target.value * (products.find((product) => product.id == e.target.name)).price > 0) {
-        setPurchasedQuantityState({
-            id: Number(e.target.name),
-            max_stock: Number(purchaseMaxStorage(e.target.name)),
-            purchased: Number(e.target.value) < Number(purchaseMaxStorage(e.target.name)) ?
-                Number(e.target.value) : Number(purchaseMaxStorage(e.target.name)),
-        })
-        // }
+
+        let price = products.find((product) => product.id == e.target.name).price
+        let previousPurchased = productsPurchaseInfo.find((product) => product.id == e.target.name).purchased
+
+        let spendedBudget = productsPurchaseInfo.reduce(
+            (previousValue, currentValue) => {
+                return (previousValue + currentValue.purchasedValue)
+            }, 0)
+
+        console.log("initialBudgetbefore", initialBudget)
+        console.log("spendedBudgetbefore", spendedBudget)
+        console.log("currentBudgetbefore:", currentBudget)
+        console.log("previousPurchased:", previousPurchased)
+        console.log("nextPurchased:", Number(e.target.value))
+        console.log("price:", price)
+        console.log("if sonrası")
+        console.log("result", currentBudget - Number(e.target.value) * price)
+
+        if (Number(e.target.value) < previousPurchased || (Number(e.target.value) > previousPurchased && currentBudget - (Number(e.target.value) - previousPurchased) * price > 0)) {
+
+            setPurchasedQuantityState({
+                id: Number(e.target.name),
+                max_stock: Number(purchaseMaxStorage(e.target.name)),
+                purchased: Number(e.target.value) < Number(purchaseMaxStorage(e.target.name)) ?
+                    Number(e.target.value) : Number(purchaseMaxStorage(e.target.name)),
+            })
+        }
     }
 
     const purchaseIncreaseByOne = (e) => {

@@ -15,7 +15,7 @@ function BudgetBar() {
         }, 0)
 
     let currentBudget = initialBudget - spendedBudget
-    const currentBudgetFormatted = numeral(currentBudget).format('0,0');
+    const currentBudgetFormatted = numeral(currentBudget).format('0,0.00');
 
     return (
         // .sticky-top will not work if it is inside any container. It must be the outside-most element inside <body>
