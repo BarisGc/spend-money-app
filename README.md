@@ -1,5 +1,5 @@
 
-###Project Name: *spend-money-app*
+### Project Name: *spend-money-app*
 - **Project Deployment:** Please, click > [Netlify](https://spend-money-app-barisd.netlify.app/)
 
 - **Project Goal:** Building a project with React-Redux &  Redux-Toolkit
