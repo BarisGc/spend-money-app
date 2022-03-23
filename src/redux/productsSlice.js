@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Fetch Api Data
 export const fetchProducts = createAsyncThunk('products/getAllProducts', async () => {
-    const res = await axios(`https://fakestoreapi.com/products?limit=18`)
+    const res = await axios(`${process.env.REACT_APP_API_ENDPOINT}/products?limit=18`)
     return res.data
 })
 

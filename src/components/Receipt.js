@@ -39,9 +39,9 @@ function Receipt() {
                         {productAndPurchaseInfoMergedObjects.map((element) =>
                             element.purchased > 0 &&
                             (<Row key={element.id} className='  pb-2 '>
-                                <Col xs={{ span: 6, offset: 0 }} className='text-start' > {`${element.title}`} </Col>
+                                <Col xs={{ span: 6, offset: 0 }} className='text-start' > {`- ${element.title}`} </Col>
                                 <Col xs={{ span: 3, offset: 0 }} className='text-center'>{`x${element.purchased}`}</Col>
-                                <Col xs={{ span: 3, offset: 0 }} className='text-end price fw-bold'>{`${element.purchasedValue.toFixed(2)}`}</Col>
+                                <Col xs={{ span: 3, offset: 0 }} className='text-end price fw-bold'>{`$${element.purchasedValue.toFixed(2)}`}</Col>
                             </Row>)
                         )}
                         {spendedBudgetFormatted &&
