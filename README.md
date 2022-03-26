@@ -3,6 +3,7 @@
 - **Project Deployment:** Please, click > [Netlify](https://spend-money-app-barisd.netlify.app/)
 
 - **Project Goal:** Building a project with React-Redux &  Redux-Toolkit
+- **Project Sub-Goals:** Buttons
 - **Completed:** Almost
 - **Notes:** The site is ready for integration testing but in the future, some styles may be updated, "loading" & "error" components will be prepared and the code may be revised to increase readability        
 - **Frameworks/Libraries:** React, React-Redux, Redux-Toolkit, React-Bootstrap, Axios, Numeral
