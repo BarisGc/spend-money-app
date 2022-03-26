@@ -2,7 +2,7 @@
 ### Project Name: *spend-money-app*
 - **Project Deployment:** Please, click > [Netlify](https://spend-money-app-barisd.netlify.app/)
 
-- #Project Goal: 
+#Project Goal: 
 - Building a project with React-Redux &  Redux-Toolkit
 - **Project Sub-Goals:** 
 - Styles of Buttons are reactive depended on "out of stock"
