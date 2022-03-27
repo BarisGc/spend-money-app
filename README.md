@@ -5,7 +5,8 @@
 Please, click > [Netlify](https://spend-money-app-barisd.netlify.app/)
 ### Project Main Goal: 
 - Building a project with React-Redux &  Redux-Toolkit, experiencing how to handle complex state management with React-Redux and how to handle crud operations easier with Redux-Toolkit
-### Project Sub-Goals: 
+### Project Sub-Goals:
+- Random stock of products
 - Reactive styles of buttons depended on various states like "Out Of Stock", "Sell / Buy", "No More Sell" etc.
 - Using a Web API to get elements to display (refer to products in this project)
 - To handle asynchronous tasks, with Redux Thunk’s middleware
