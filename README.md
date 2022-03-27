@@ -1,7 +1,8 @@
 
 # Project Name: *spend-money-app*
-- **Project Deployment:** Please, click > [Netlify](https://spend-money-app-barisd.netlify.app/)
 
+### Project Deployment:
+Please, click > [Netlify](https://spend-money-app-barisd.netlify.app/)
 ### Project Main Goal: 
 - Building a project with React-Redux &  Redux-Toolkit, experiencing how to handle complex state management with React-Redux and how to handle crud operations easier with Redux-Toolkit
 ### Project Sub-Goals: 
