@@ -6,7 +6,8 @@
 - Building a project with React-Redux &  Redux-Toolkit, experiencing how to handle complex state management with React-Redux and how to handle crud operations easier with Redux-Toolkit
 ### Project Sub-Goals: 
 - Reactive styles of buttons depended on various states like "Out Of Stock", "Sell / Buy", "No More Sell" etc.
-- Using a Web API to get elements to display (products)
+- Using a Web API to get elements to display (refer to products in this project)
+- To handle asynchronous tasks, with Redux Thunk’s middleware
 - Hidden / Active components depended on various states
 - To practice React-Bootstrap
 - To practice / remember some basic css properties like "Sticky Positions" etc. 
