@@ -1,4 +1,3 @@
-
 # Project Name: *spend-money-app*
 
 ### Project Deployment:
