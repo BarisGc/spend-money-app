@@ -1,4 +1,4 @@
-# Project Name: *spend-money-app*
+# Project Name: *Spend-Money-App*
 
 ### Project Deployment:
 Please, click > [Netlify](https://spend-money-app-barisd.netlify.app/)
