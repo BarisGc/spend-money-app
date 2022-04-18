@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchProducts, productSelectors, setPurchase }
     from "../redux/productsSlice";
 import { Row, Col, Card, ButtonToolbar, Button, ButtonGroup, InputGroup, FormControl } from 'react-bootstrap'
-
+import Loading from "./Loading";
 // import Loading from './Loading';
 // import Error from './Error';
 
@@ -153,7 +153,8 @@ function List() {
 
     return (
         <Row className="pt-0">
-            {products.map((product) => (
+            {!products[0] && <Col xs={12} className='d-flex justify-content-center'><Loading /></Col>}
+            {products && products.map((product) => (
                 <Col key={product.id} md={{ span: 4, offset: 0 }} className='pt-0 mb-4'>
                     <Card className='listCard pt-3 d-flex align-items-center h-100 '>
                         <Card.Img variant="top" src={product.image} />
